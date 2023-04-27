@@ -16,7 +16,7 @@ public:
     Casino(const Casino &rhs);
 
     friend std::istream &operator>>(std::istream &in, Casino &rhs);
-    friend std::ostream &operator<<(std::ostream &out, Casino &rhs);
+    friend std::ostream &operator<<(std::ostream &out, const Casino &rhs);
 
     bool operator != (const Casino &rhs);
     bool operator == (const Casino &rhs);

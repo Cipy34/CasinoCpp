@@ -3,6 +3,7 @@
 #include <vector>
 #include<cstdlib>
 #include <chrono>
+#include <memory>
 
 #include "player.h"
 #include "player.cpp"
@@ -18,6 +19,17 @@
 
 #include "drink.h"
 #include "drink.cpp"
+
+#include "exception1.h"
+#include "exception1.cpp"
+
+#include "exception2.h"
+#include "exception2.cpp"
+
+#include "exception3.h"
+#include "exception3.cpp"
+
+using namespace std;
 
 void initial(Casino *c, Drink *d, Game *g){
     ///Casino initializer;
@@ -69,15 +81,32 @@ void initial(Casino *c, Drink *d, Game *g){
     g[2].setChance(7);
     
 }
-void player(Player &me){
-    cin>>me;
+int player(Player &me){
+    try{
+        cin>>me;
+    }
+    catch(Exception1 &child){
+        cout<<child.what();
+        return 0;
+    }
+    catch(Exception2 &nomoney){
+        cout<<nomoney.what();
+        return 0;
+    }
+    catch(Exception3 &character){
+        cout<<character.what();
+        return 0;
+    }
     me.setAlcohol(0);
     me.setThirsty(0);
+    if(Player::getLuck() <= 5)
+        cout<<"You are not very lucky today!\nLuck level : "<<Player::getLuck()<<"\n";
+    else
+        cout<<"You are very lucky today!\nLuck level : "<<Player::getLuck()<<"\n";
 }
 int drinksys(Player &me, Drink *d, int nrdrinks){
     int choose;
-    cout<< string (10, '\n');
-    cout<<"Your stats: Sold : "<<me.getMoney()<<" Thirsty : "<<me.getThirsty()<<" Alcohol : "<<me.getAlcohol()<<"\n";
+    cout<<"Your stats: Money : "<<me.getMoney()<<" Thirsty : "<<me.getThirsty()<<" Alcohol : "<<me.getAlcohol()<<"\n";
     cout<<"0 - Nothing"<<"\n";
     for(int i = 1; i <= nrdrinks; i++)
         cout<<i<<" - "<<d[i-1].getName()<<" $"<<d[i-1].getPrice()<<"\n";
@@ -85,59 +114,51 @@ int drinksys(Player &me, Drink *d, int nrdrinks){
     if(choose == 0)
         return 0;
     else{
-        me.setThirsty(me.getThirsty() - d[choose-1].getThirsty());
-        me.setMoney(me.getMoney() - d[choose-1].getPrice());
-        me.setAlcohol(me.getAlcohol() + d[choose-1].getAlcohol());
-        if(d[choose-1].getAlcohol() == 0)
-            me.setAlcohol(me.getAlcohol() - 2);
-        if(me.getThirsty() < 0)
-            me.setThirsty(0);
-        if(me.getAlcohol() < 0)
-            me.setAlcohol(0);
+        if(me.getMoney() > d[choose-1].getPrice()){
+            me.setThirsty(me.getThirsty() - d[choose-1].getThirsty());
+            me.setMoney(me.getMoney() - d[choose-1].getPrice());
+            me.setAlcohol(me.getAlcohol() + d[choose-1].getAlcohol());
+            if(d[choose-1].getAlcohol() == 0)
+                me.setAlcohol(me.getAlcohol() - 2);
+            if(me.getThirsty() < 0)
+                me.setThirsty(0);
+            if(me.getAlcohol() < 0)
+                me.setAlcohol(0);
+        }
+        else
+           cout<<"You don't have money! Pick something else"<<"\n";
     }
     return drinksys(me, d, nrdrinks);
 }
 
-int start(const Casino *c, const Player me, int nrcasinos){
+int start(const Casino *c, Player me, int nrcasinos){
     int choose, i;
     cout<<"Hello "<<me.getName()<<"! Where do you want to go?"<<"\n";
     cout<<"0 - Go home"<<"\n";
     for(i = 1; i <= nrcasinos; i++)
-        cout<<i<<" - "<<c[i-1].getName()<<" on "<<c[i-1].getLocation()<<"\n";
+        cout<<i<<" - "<<c[i-1];
     cin>>choose;
+    if(c[choose-1].getNrseats() == 0){
+        cout<<"There are no available seats!";
+    }
+
     return choose;
 }
-int choosecasino(Player me, const Casino *c, int &place, int nrcasinos){
+int choosecasino(Player me, Casino *c, int &place, int nrcasinos){
     place = start(c, me, nrcasinos);
-    if(me.getAge() < 18){
-        cout<<"You are too young!";
-        return 0;
-    }
-    if(place != 0 && me.getAge() >= 18){
+    if(place != 0 && me.getAge() >= 18 && c[place-1].getNrseats() != 0){
         cout << string( 10, '\n' );
         cout<<"Welcome to "<<c[place-1].getName()<<"!"<<"\n";
         cout << string( 3, '\n' );
     }
 }
-int games(const Game *g, int nrgames){
+int choosegame(const Game *g, int nrgames){
     int choose;
     cout<<"Choose the game you like "<<"\n";
     for(int i = 0; i < nrgames; i++)
         cout<<i<<" - "<<g[i].getName()<<"\n";
     cin>>choose;
     return choose;
-}
-void choosegame(const Game *g, int &game, int nrgames){
-    Player me;
-    game = games(g, nrgames);
-    cout<<"The rules are the following : "<<"\n";
-    cout<<"- If you will get three same numbers, you will win : "<<g[game].getWin()<<" multiplied by your bet $"<<"\n";
-    cout<<"- In this game are "<<g[game].getChance()<<" numbers"<<"\n";
-    cout<<"- If you win a round you can try to double the win"<<"\n";
-    cout<<"- If your alcohol is equal or more than 10 you are kicked out the casino!"<<"\n";
-    cout<<"- You can't play if your thirsty level is 10"<<"\n";
-    cout<<"- When you play the slots your thirsty level will increase by 1"<<"\n";
-    cout<<"- Have fun!"<<"\n";
 }
 
 void random(Game *g, vector <int> &slot, int game){
@@ -179,7 +200,8 @@ int gamble(Game *g, int &money){
 }
 int winner(Player &me, Game *g, int bet, int game){
     int choose, money;
-    cout<<"You won : $"<<bet*g[game].getWin()<<"\n";
+    Player::congrats();
+    cout<<bet*g[game].getWin()<<"$\n";
     money = bet*g[game].getWin();
     cout<<"0 - Cashout"<<"\n"<<"1 - Gamble"<<"\n";
     cin>>choose;
@@ -211,7 +233,7 @@ int ingame(Player &me, Game *g, int game, Drink *d, int nrdrinks)
     while(choose > 0)
     {
         cout<<"0 - Cashout"<<"\n"<<"1 - Start"<<"\n"<<"2 - Change the bet"<<"\n"<<"3 - Menu"<<"\n";
-        cout<<"Your sold : $"<<me.getMoney()<<"            Bet : $"<<bet<<"\n";
+        cout<<"Money : $"<<me.getMoney()<<"            Bet : $"<<bet<<"\n";
         cout<<"Thirsty lvl : "<<me.getThirsty()<<"            Alcohol lvl : "<<me.getAlcohol()<<"\n";
         cin>>choose;
 
@@ -245,7 +267,7 @@ int ingame(Player &me, Game *g, int game, Drink *d, int nrdrinks)
                     }
                 }
                 else{
-                    cout<<"Your sold is empty"<<"\n";
+                    cout<<"Your balance is empty"<<"\n";
                     return 0;
                 }
                 break;
@@ -267,7 +289,7 @@ int ingame(Player &me, Game *g, int game, Drink *d, int nrdrinks)
 int createworld(Casino *c, Game *g, Drink *d, int &nrcasinos, int &nrgames, int &nrdrinks){
     int choose = 1;
     while(choose != 0 && choose != 7){
-        cout<<"\n0 - Exit\n\n1 - Add new casino\n2 - Add new game\n3 - Add drinks\n\n";
+        cout<<"0 - Exit\n\n1 - Add new casino\n2 - Add new game\n3 - Add drinks\n\n";
         cout<<"4 - Display the casinos\n5 - Display the games\n6 - Display the drinks\n7 - Start the game\n";
         cin>>choose;
         switch (choose) {
@@ -283,7 +305,7 @@ int createworld(Casino *c, Game *g, Drink *d, int &nrcasinos, int &nrgames, int 
             }
             case 2:{
                 cout<<"These are the games :"<<"\n";
-                for(int i = 0; i < nrcasinos; i++)
+                for(int i = 0; i < nrgames; i++)
                     cout<<g[i];
                 nrgames++;
                 cout<<"Adding new game"<<"\n";
@@ -307,7 +329,7 @@ int createworld(Casino *c, Game *g, Drink *d, int &nrcasinos, int &nrgames, int 
             }
             case 5:{
                 cout<<"These are the games :"<<"\n";
-                for(int i = 0; i < nrcasinos; i++)
+                for(int i = 0; i < nrgames; i++)
                     cout<<g[i];
                 break;
             }
@@ -318,14 +340,14 @@ int createworld(Casino *c, Game *g, Drink *d, int &nrcasinos, int &nrgames, int 
                 break;
             }
             case 7:{
-                cout<<"The game is starting now:\n";
+                cout<<"The game is starting now!\n";
             }
         }
     }
     return 1;
 }
 int main() {
-    Player me;
+    unique_ptr<Player> me = make_unique<Player>();
     Game *g = new Game[20];
     Casino *c = new Casino[20];
     Drink *d = new Drink[20];
@@ -337,15 +359,20 @@ int main() {
 
     if(createworld(c, g, d, nrcasinos, nrgames, nrdrinks) == 0)
         return 0;
-    player(me);
+    player(*me);
+
+    if(me->getAge() < 18)
+        return 0;
+    if(me->getMoney() == 0)
+        return 0;
 
     start:
 
-    choosecasino(me, c, place, nrcasinos);
+    choosecasino(*me, c, place, nrcasinos);
     if(place == 0)
         return 0;
-    if(me.getAge() >= 18){
-        choosegame(g, game, nrgames);
+    if(me->getAge() >= 18 && c[place-1].getNrseats() != 0){
+        game = choosegame(g, nrgames);
 
         cout<<"0 - Go home"<<"\n"<<"1 - Play"<<"\n"<<"2 - Change the casino"<<"\n";
         cin>>choose;
@@ -353,7 +380,7 @@ int main() {
         switch (choose) {
             case 0: break;
             case 1:{
-                if(ingame(me, g, game, d, nrdrinks) > 0)
+                if(ingame(*me, g, game, d, nrdrinks) > 0)
                     goto start;
             }
                 break;
@@ -361,5 +388,8 @@ int main() {
         }
     }
 
+    delete[] g;
+    delete[] c;
+    delete[] d;
     return 0;
 }

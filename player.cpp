@@ -4,6 +4,12 @@
 #include <iostream>
 #include <string>
 #include "player.h"
+#include "exception1.h"
+#include "exception2.h"
+#include "exception3.h"
+#include<cstdlib>
+#include <chrono>
+
 using namespace std;
 
 Player::Player(){
@@ -91,13 +97,6 @@ const {
     return thirsty;
 }
 
-
-ostream &operator << (std::ostream & os, const Player & rhs)
-{
-    os<<"Hello! My name is "<<rhs.name<<", I am "<<rhs.age<<" years old and I have "<<rhs.money<<"$"<<"\n";
-    return os;
-}
-
 istream &operator>>(std::istream &is, Player &rhs)
 {
     string name_;
@@ -116,5 +115,20 @@ istream &operator>>(std::istream &is, Player &rhs)
     rhs.setAge(age_);
     rhs.setMoney(money_);
 
+    if(age_ < 18)
+        throw Exception1();
+    if (money_ == 0)
+        throw Exception2();
+
     return is;
+}
+
+void Player::congrats(){
+    cout<<"You won : ";
+}
+
+int Player::getLuck() {
+    unsigned seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    srand(seed);
+    return rand()%10;
 }

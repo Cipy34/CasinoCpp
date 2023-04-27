@@ -79,7 +79,7 @@ istream &operator>>(std::istream &is, Casino &rhs)
 
     return is;
 }
-ostream &operator << (std::ostream & os, Casino & rhs){
+ostream &operator << (std::ostream & os, const Casino & rhs){
     os<<"Name : "<<rhs.name<<", Location : "<<rhs.location<<", Available seats : "<<rhs.nrseats<<"\n";
     return os;
 }

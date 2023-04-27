@@ -9,7 +9,8 @@ using namespace std;
 class Player {
 private:
     string name;
-    int age, money, alcohol, thirsty;;
+    int age, money, alcohol, thirsty;
+    static int luck;
 public:
     Player();
     Player(const string& name_, int age_, int money_, int alcohol_, int thirsty_);
@@ -19,7 +20,6 @@ public:
     bool operator != (const Player &rhs) const;
     bool operator == (const Player &rhs) const;
 
-    friend std::ostream &operator<<(std::ostream &out, const Player &rhs);
     friend std::istream &operator>>(std::istream &in, Player &rhs);
 
     void setName(const string &name_);
@@ -33,5 +33,9 @@ public:
     [[nodiscard]] int getMoney() const;
     [[nodiscard]] int getAlcohol() const;
     [[nodiscard]] int getThirsty() const;
+
+    static int getLuck();
+    static void congrats();
+
 };
 #endif //OOP_LAB2_PLAYER_H
