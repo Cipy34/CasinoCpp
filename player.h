@@ -13,7 +13,7 @@ private:
     static int luck;
 public:
     Player();
-    Player(const string& name_, int age_, int money_, int alcohol_, int thirsty_);
+    Player(const string name_, int age_, int money_, int alcohol_, int thirsty_);
     Player(const Player &rhs);
     Player &operator = (const Player &rhs);
 
@@ -22,7 +22,7 @@ public:
 
     friend std::istream &operator>>(std::istream &in, Player &rhs);
 
-    void setName(const string &name_);
+    void setName(const string name_);
     void setAge(int age_);
     void setMoney(int money_);
     void setAlcohol(int alcohol_);

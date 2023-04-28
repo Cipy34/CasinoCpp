@@ -12,7 +12,7 @@ private:
     int nrseats;
 public:
     Casino();
-    Casino(const string& location_, const string& name_, int nrseats_);
+    Casino(const string location_, const string name_, int nrseats_);
     Casino(const Casino &rhs);
 
     friend std::istream &operator>>(std::istream &in, Casino &rhs);
@@ -21,8 +21,8 @@ public:
     bool operator != (const Casino &rhs);
     bool operator == (const Casino &rhs);
 
-    void setLocation(const string& location_);
-    void setName(const string& name_);
+    void setLocation(const string location_);
+    void setName(const string name_);
     void setNrseats(int nrseats_);
 
     Casino &operator = (const Casino &rhs);

@@ -18,7 +18,7 @@ Player::Player(){
     alcohol = 0;
     thirsty = 0;
 }
-Player::Player(const string &name_, const int age_, const int money_, const int alcohol_, const int thirsty_){
+Player::Player(const string name_, const int age_, const int money_, const int alcohol_, const int thirsty_){
     name = name_;
     age = age_;
     money = money_;
@@ -55,7 +55,7 @@ Player &Player::operator = (const Player &rhs)
     return *this;
 }
 
-void Player::setName(const string &name_){
+void Player::setName(const string name_){
     name = name_;
 }
 void Player::setAge(const int age_){

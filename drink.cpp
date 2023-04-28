@@ -13,7 +13,7 @@ Drink::Drink(){
     price = 0;
 }
 
-Drink::Drink(const string &name_, const int alcohol_, const int thirsty_, const int price_){
+Drink::Drink(const string name_, const int alcohol_, const int thirsty_, const int price_){
     name = name_;
     alcohol = alcohol_;
     thirsty = thirsty_;
@@ -35,7 +35,7 @@ bool Drink::operator==(const Drink &rhs){
     return name == rhs.name || alcohol == rhs.alcohol || thirsty == rhs.thirsty || price == rhs.price;
 }
 
-void Drink::setName(const string &name_){
+void Drink::setName(const string name_){
     name = name_;
 }
 void Drink::setAlcohol(const int alcohol_){
