@@ -12,7 +12,7 @@ Casino::Casino(){
     nrseats = 0;
 }
 
-Casino::Casino(const string &location_, const string &name_, const int nrseats_){
+Casino::Casino(const string location_, const string name_, const int nrseats_){
     location = location_;
     name = name_;
     nrseats = nrseats_;
@@ -31,10 +31,10 @@ bool Casino::operator != (const Casino &rhs){
     return location != rhs.location || name != rhs.name || nrseats != rhs.nrseats;
 }
 
-void Casino::setLocation(const string &location_){
+void Casino::setLocation(const string location_){
     location = location_;
 }
-void Casino::setName(const string &name_){
+void Casino::setName(const string name_){
     name = name_;
 }
 void Casino::setNrseats(const int nrseats_){
