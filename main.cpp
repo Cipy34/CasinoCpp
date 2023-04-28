@@ -145,17 +145,12 @@ int choosecasino(Player me, Casino *c, int &place, int nrcasinos){
         cout << string( 3, '\n' );
     }
 }
-int choosegame(const Game *g, int nrgames){
-    int choose;
-    cout<<"Choose the game you like "<<"\n";
-    for(int i = 0; i < nrgames; i++)
-        cout<<i<<" - "<<g[i].getName()<<"\n";
-    cin>>choose;
-    if(choose >= 0 && choose < nrgames)
-        return choose;
-    return 0;
+void choosegame(const Game *g, int nrgames, int &choose) {
+    cout << "Choose the game you like " << "\n";
+    for (int i = 0; i < nrgames; i++)
+        cout << i << " - " << g[i].getName() << "\n";
+    cin >> choose;
 }
-
 void random(Game *g, vector <int> &slot, int game){
     cout << string( 10, '\n' );
     unsigned seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -193,7 +188,7 @@ int gamble(Game *g, int &money){
     }
     return money;
 }
-int winner(Player &me, Game *g, int bet, int game){
+void winner(Player &me, Game *g, int bet, int game){
     int choose, money;
     Player::congrats();
     cout<<bet*g[game].getWin()<<"$\n";
@@ -205,23 +200,22 @@ int winner(Player &me, Game *g, int bet, int game){
         me.setMoney(me.getMoney() + gamble(g, money));
     else
         me.setMoney(me.getMoney() + money);
-
 }
 
-int changebet(int money, int bet){
+void changebet(int money, int &bet){
     cout<<"Place the bet : $";
     cin>>bet;
     if(bet > money){
         cout<<"The bet is to high! Please change the bet"<<"\n";
-        return changebet(money, 0);
+        bet = 0;
     }
-    return bet;
 }
 int ingame(Player &me, Game *g, int game, Drink *d, int nrdrinks)
 {
     int choose = 1, bet = 0;
     vector <int> slot(3);
-    bet = changebet(me.getMoney(), bet);
+    while(bet == 0)
+        changebet(me.getMoney(), bet);
     cout << string( 10, '\n' );
 
     while(choose > 0)
@@ -268,7 +262,7 @@ int ingame(Player &me, Game *g, int game, Drink *d, int nrdrinks)
             }
 
             case 2:{
-                bet = changebet(me.getMoney(), bet);
+                changebet(me.getMoney(), bet);
                 cout << string( 10, '\n' );
                 break;
             }
@@ -366,8 +360,8 @@ int main() {
     if(place == 0)
         return 0;
     if(me->getAge() >= 18 && c[place-1].getNrseats() != 0){
-        game = choosegame(g, nrgames);
-
+        choosegame(g, nrgames, choose);
+        game = choose;
         cout<<"0 - Go home"<<"\n"<<"1 - Play"<<"\n"<<"2 - Change the casino"<<"\n";
         cin>>choose;
 
