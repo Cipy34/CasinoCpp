@@ -137,7 +137,7 @@ int start(const Casino *c, Player me, int nrcasinos){
 
     return choose;
 }
-int choosecasino(Player me, Casino *c, int &place, int nrcasinos){
+void choosecasino(Player me, Casino *c, int &place, int nrcasinos){
     place = start(c, me, nrcasinos);
     if(place != 0 && me.getAge() >= 18 && c[place-1].getNrseats() != 0){
         cout << string( 10, '\n' );
