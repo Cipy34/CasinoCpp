@@ -6,25 +6,18 @@
 #include <memory>
 
 #include "player.h"
-#include "player.cpp"
 
 #include "slot.h"
-#include "slot.cpp"
 
 #include "game.h"
-#include "game.cpp"
 
 #include "casino.h"
-#include "casino.cpp"
 
 #include "drink.h"
-#include "drink.cpp"
 
 #include "exception1.h"
-#include "exception1.cpp"
 
 #include "exception2.h"
-#include "exception2.cpp"
 
 using namespace std;
 
