@@ -13,13 +13,13 @@ private:
     int chance, win;
 public:
     Game();
-    Game(const string name_, int chance_, int win_);
+    Game(const string& name_, int chance_, int win_);
     Game(const Game &rhs);
 
     bool operator != (const Game &rhs);
     bool operator == (const Game &rhs);
 
-    void setName(const string name_);
+    void setName(const string& name_);
     void setChance(int chance_);
     void setWin(int win_);
 

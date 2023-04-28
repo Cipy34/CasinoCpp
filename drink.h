@@ -12,13 +12,13 @@ private:
     int alcohol, price, thirsty;
 public:
     Drink();
-    Drink(const string name, int alcohol, int thirsty, int price);
+    Drink(const string& name, int alcohol, int thirsty, int price);
     Drink(const Drink &rhs);
 
     bool operator != (const Drink &rhs);
     bool operator == (const Drink &rhs);
 
-    void setName(const string name_);
+    void setName(const string &name_);
     void setAlcohol(int alcohol_);
     void setThirsty(int thirsty_);
     void setPrice(int price_);

@@ -11,7 +11,7 @@ Game::Game(){
     win = 0;
 }
 
-Game::Game(const string name_, const int chance_, const int win_){
+Game::Game(const string& name_, const int chance_, const int win_){
     name = name_;
     chance = chance_;
     win = win_;
@@ -31,7 +31,7 @@ bool Game:: operator == (const Game &rhs){
     return name == rhs.name || chance == rhs.chance || win == rhs.win;
 }
 
-void Game::setName(const string name_){
+void Game::setName(const string& name_){
     name = name_;
 }
 
