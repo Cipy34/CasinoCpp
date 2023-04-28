@@ -49,10 +49,14 @@ void Drink::setPrice(const int price_){
 }
 
 Drink &Drink::operator=(const Drink &rhs){
-    setName(rhs.name);
-    setAlcohol(rhs.alcohol);
-    setThirsty(rhs.thirsty);
-    setPrice(rhs.price);
+    if(this != &rhs)
+    {
+        setName(rhs.name);
+        setAlcohol(rhs.alcohol);
+        setThirsty(rhs.thirsty);
+        setPrice(rhs.price);
+    }
+    return *this;
 }
 
 string Drink::getName() const{

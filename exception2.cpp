@@ -3,6 +3,7 @@
 //
 
 #include "exception2.h"
+using namespace std;
 
 Exception2::Exception2(){
     message = "You can't enter the casino with no money!";

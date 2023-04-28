@@ -26,9 +26,6 @@
 #include "exception2.h"
 #include "exception2.cpp"
 
-#include "exception3.h"
-#include "exception3.cpp"
-
 using namespace std;
 
 void initial(Casino *c, Drink *d, Game *g){
@@ -81,21 +78,17 @@ void initial(Casino *c, Drink *d, Game *g){
     g[2].setChance(7);
     
 }
-int player(Player &me){
+void player(Player &me){
     try{
         cin>>me;
     }
     catch(Exception1 &child){
         cout<<child.what();
-        return 0;
+        return;
     }
     catch(Exception2 &nomoney){
         cout<<nomoney.what();
-        return 0;
-    }
-    catch(Exception3 &character){
-        cout<<character.what();
-        return 0;
+        return;
     }
     me.setAlcohol(0);
     me.setThirsty(0);
@@ -158,7 +151,9 @@ int choosegame(const Game *g, int nrgames){
     for(int i = 0; i < nrgames; i++)
         cout<<i<<" - "<<g[i].getName()<<"\n";
     cin>>choose;
-    return choose;
+    if(choose >= 0 && choose < nrgames)
+        return choose;
+    return 0;
 }
 
 void random(Game *g, vector <int> &slot, int game){
@@ -216,7 +211,6 @@ int winner(Player &me, Game *g, int bet, int game){
 int changebet(int money, int bet){
     cout<<"Place the bet : $";
     cin>>bet;
-
     if(bet > money){
         cout<<"The bet is to high! Please change the bet"<<"\n";
         return changebet(money, 0);

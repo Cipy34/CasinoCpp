@@ -2,6 +2,7 @@
 // Created by Ciprian on 27.04.2023.
 //
 #include "exception1.h"
+using namespace std;
 
 Exception1::Exception1(){
     message = "You are too young!";

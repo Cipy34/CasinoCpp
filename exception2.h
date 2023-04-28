@@ -5,6 +5,7 @@
 #include <string>
 #ifndef OOP_LAB2_EXCEPTION2_H
 #define OOP_LAB2_EXCEPTION2_H
+using namespace std;
 
 class Exception2 : public std::exception {
 private:
